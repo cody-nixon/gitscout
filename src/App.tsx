@@ -238,7 +238,7 @@ export default function App() {
             {/* Filters bar */}
             <div className="flex flex-wrap items-center gap-3 mb-4 pb-4 border-b border-zinc-800">
               <span className="text-sm text-zinc-500">
-                {totalCount.toLocaleString()} issues found
+                {filteredIssues.length} of {issues.length} shown (${totalCount.toLocaleString()} total)
               </span>
               
               <div className="flex items-center gap-1 ml-auto">

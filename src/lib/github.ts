@@ -32,6 +32,22 @@ export interface SearchResult {
 
 const GITHUB_API = "https://api.github.com";
 
+// Map framework/tool names to actual GitHub languages
+const SKILL_TO_LANGUAGE: Record<string, string> = {
+  react: "javascript",
+  vue: "javascript",
+  angular: "typescript",
+  svelte: "javascript",
+  "next.js": "typescript",
+  "node.js": "javascript",
+  django: "python",
+  flask: "python",
+  spring: "java",
+  express: "javascript",
+  tailwind: "css",
+  graphql: "javascript",
+};
+
 function getHeaders(token?: string): HeadersInit {
   const headers: HeadersInit = {
     Accept: "application/vnd.github.v3+json",
@@ -51,14 +67,24 @@ export async function searchIssues(
     page?: number;
   } = {}
 ): Promise<SearchResult> {
-  const { token, sort = "created", perPage = 30, page = 1 } = options;
+  const { token, sort = "updated", perPage = 30, page = 1 } = options;
   
-  // Build query with skills as language filters
-  const languageFilter = skills
-    .map((s) => `language:${s.toLowerCase()}`)
-    .join(" ");
+  // Map skills to actual GitHub languages (deduplicate)
+  const languages = [...new Set(
+    skills.map((s) => {
+      const lower = s.toLowerCase();
+      return SKILL_TO_LANGUAGE[lower] || lower;
+    })
+  )];
   
-  const query = `label:"good first issue" is:open is:issue ${languageFilter} sort:${sort}`;
+  // GitHub search doesn't support OR for language: directly,
+  // so we pick the first language for the main query
+  // This is a trade-off: fewer results but more relevant
+  const langFilter = languages.length > 0 
+    ? `language:${languages[0]}` 
+    : "";
+  
+  const query = `label:"good first issue" is:open is:issue ${langFilter}`;
   
   const url = `${GITHUB_API}/search/issues?q=${encodeURIComponent(query)}&sort=${sort}&order=desc&per_page=${perPage}&page=${page}`;
   
@@ -78,7 +104,6 @@ export async function getRepoInfo(
   repoUrl: string,
   token?: string
 ): Promise<RepoInfo> {
-  // repoUrl looks like https://api.github.com/repos/owner/name
   const res = await fetch(repoUrl, { headers: getHeaders(token) });
   if (!res.ok) {
     throw new Error(`Failed to fetch repo info: ${res.status}`);
@@ -106,9 +131,9 @@ export function getRelativeTime(dateStr: string): string {
 
 export function getFreshnessScore(updatedAt: string): number {
   const days = (Date.now() - new Date(updatedAt).getTime()) / 86400000;
-  if (days < 3) return 5;
-  if (days < 7) return 4;
-  if (days < 14) return 3;
-  if (days < 30) return 2;
+  if (days < 1) return 5;
+  if (days < 3) return 4;
+  if (days < 7) return 3;
+  if (days < 21) return 2;
   return 1;
 }
