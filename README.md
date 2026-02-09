@@ -1,73 +1,70 @@
-# React + TypeScript + Vite
+# GitScout 🔭
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+> Find your first open source contribution in 60 seconds.
 
-Currently, two official plugins are available:
+**Live:** [cody-nixon.github.io/gitscout](https://cody-nixon.github.io/gitscout/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## The Problem
 
-## React Compiler
+Junior developers are told "contribute to open source" but nobody helps them find the right project. GitHub has 86,000+ "good first issues" — but no skill matching, no freshness filters, no complexity analysis. Finding the right issue to start with is overwhelming.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## The Solution
 
-## Expanding the ESLint configuration
+GitScout matches your skills to real open source issues:
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+1. **Select your skills** — JavaScript, Python, React, Go, etc.
+2. **Click Scout** — searches GitHub for fresh "good first issue" issues
+3. **AI Analysis** (optional) — rates complexity, skill match %, and beginner-friendliness
+4. **Filter & Sort** — by match score, freshness, complexity, or stars
+5. **Bookmark** — save interesting issues for later
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Features
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+- 🎯 **Skill-based matching** — Select languages & frameworks you know
+- 🤖 **AI-powered analysis** — Complexity ratings, skill match %, estimated time (via OpenRouter)
+- 🕐 **Freshness indicators** — See how recently issues were updated
+- ⭐ **Repo metadata** — Stars, comments, activity level
+- 🔖 **Bookmarks** — Save issues to review later
+- 🌙 **Dark/light mode** — Dark by default
+- 📱 **Mobile responsive** — Works on any device
+- 🔑 **BYOK** — Bring your own GitHub token & OpenRouter key (stored locally)
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Tech Stack
+
+- React + TypeScript + Vite
+- shadcn/ui + Tailwind CSS
+- GitHub Search API
+- OpenRouter API (Gemini Flash) for AI analysis
+- Deployed on GitHub Pages
+
+## Setup (local development)
+
+```bash
+git clone https://github.com/cody-nixon/gitscout.git
+cd gitscout
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Optional: AI Analysis
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+1. Get an API key from [openrouter.ai/keys](https://openrouter.ai/keys)
+2. Click Settings in the app and paste your key
+3. Issues will be analyzed for complexity and skill match
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### Optional: Higher GitHub Rate Limits
+
+1. Create a token at [github.com/settings/tokens](https://github.com/settings/tokens) (no scopes needed)
+2. Add it in Settings for 30 req/min instead of 10
+
+## Screenshots
+
+Landing page with skill selector, search results with freshness indicators and filter controls.
+
+## License
+
+MIT
+
+---
+
+Built by [Cody Nixon](https://github.com/cody-nixon) in a single session as part of the Daily Build challenge.
